@@ -4,7 +4,7 @@ interface DoctorAddress {
 	district: string;
 }
 
-interface OpeningHours {
+export interface OpeningHours {
 	start: string;
 	end: string;
 	isClosed: boolean;

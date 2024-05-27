@@ -3,12 +3,14 @@ import Doctor from '@/entities/Doctor';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { UserRoundX } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
 	doctor: Doctor;
 }
 
 const DoctorListItem = ({ doctor }: Props) => {
+	const navigate = useNavigate();
 	const dayOrder = { MON: 1, TUE: 2, WED: 3, THU: 4, FRI: 5, SAT: 6, SUN: 7 };
 
 	const sortedOpeningHours = doctor.opening_hours.sort(
@@ -16,6 +18,10 @@ const DoctorListItem = ({ doctor }: Props) => {
 	);
 
 	const openDays = sortedOpeningHours.filter((hour) => !hour.isClosed);
+
+	const goDoctorProfile = () => {
+		navigate(`/doctors/${doctor.id}`);
+	};
 
 	return (
 		<Card className="flex items-center p-4 sm:p-6 gap-4 sm:gap-6">
@@ -47,7 +53,7 @@ const DoctorListItem = ({ doctor }: Props) => {
 					)}
 				</div>
 			</div>
-			<Button className="shrink-0" size="sm">
+			<Button className="shrink-0" size="sm" onClick={goDoctorProfile}>
 				Book Appointment
 			</Button>
 		</Card>
