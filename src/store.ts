@@ -31,7 +31,7 @@ const useStore = create<StoreState>((set, get) => ({
 		set({ user: newUser });
 	},
 	fetchDoctors: async () => {
-		const doctors = await doctorsClient.getAll({});
+		const doctors = await doctorsClient.getAll();
 		if (!doctors) return;
 		const doctorsById = doctors.reduce(
 			(acc: { [key: string]: Doctor }, doctor) => {
@@ -64,7 +64,7 @@ const useStore = create<StoreState>((set, get) => ({
 		}
 	},
 	fetchBookings: async () => {
-		const bookings = await bookingsClient.getAll({});
+		const bookings = await bookingsClient.getAll();
 		set({ bookings });
 	},
 	addBooking: async (booking) => {
