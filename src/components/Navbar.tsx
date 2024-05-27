@@ -1,7 +1,7 @@
 import { CircleUser, Menu, SparkleIcon } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { Button } from './ui/button';
-import { Sheet, SheetTrigger, SheetContent } from './ui/sheet';
+import { Button } from '@/components/ui/Button';
+import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/Sheet';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -9,8 +9,9 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from './ui/dropdown-menu';
+} from '@/components/ui/DropdownMenu';
 import useStore from '@/store';
+import { BOOKING_ROUTE_PATH, HOME_ROUTE_PATH } from '@/utils/const';
 
 const Navbar = () => {
 	const { user, setUser } = useStore();
@@ -20,16 +21,16 @@ const Navbar = () => {
 		<header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
 			<nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
 				<Link
-					to="/"
+					to={HOME_ROUTE_PATH}
 					className="flex items-center gap-2 text-lg font-semibold md:text-base"
 				>
 					<SparkleIcon className="h-6 w-6" />
 					<span className="sr-only">Necktie</span>
 				</Link>
 				<Link
-					to="/"
+					to={HOME_ROUTE_PATH}
 					className={
-						pathname === '/'
+						pathname === HOME_ROUTE_PATH
 							? 'text-foreground transition-colors hover:text-foreground'
 							: 'text-muted-foreground transition-colors hover:text-foreground'
 					}
@@ -37,9 +38,9 @@ const Navbar = () => {
 					Doctors
 				</Link>
 				<Link
-					to="/bookings"
+					to={BOOKING_ROUTE_PATH}
 					className={
-						pathname === '/bookings'
+						pathname === BOOKING_ROUTE_PATH
 							? 'text-foreground transition-colors hover:text-foreground'
 							: 'text-muted-foreground transition-colors hover:text-foreground'
 					}
@@ -61,16 +62,16 @@ const Navbar = () => {
 				<SheetContent side="left">
 					<nav className="grid gap-6 text-lg font-medium">
 						<Link
-							to="/"
+							to={HOME_ROUTE_PATH}
 							className="flex items-center gap-2 text-lg font-semibold md:text-base"
 						>
 							<SparkleIcon className="h-6 w-6" />
 							<span className="sr-only">Necktie</span>
 						</Link>
 						<Link
-							to="/"
+							to={HOME_ROUTE_PATH}
 							className={
-								pathname === '/'
+								pathname === HOME_ROUTE_PATH
 									? 'text-foreground transition-colors hover:text-foreground'
 									: 'text-muted-foreground transition-colors hover:text-foreground'
 							}
@@ -78,9 +79,9 @@ const Navbar = () => {
 							Doctors
 						</Link>
 						<Link
-							to="/bookings"
+							to={BOOKING_ROUTE_PATH}
 							className={
-								pathname === '/bookings'
+								pathname === BOOKING_ROUTE_PATH
 									? 'text-foreground transition-colors hover:text-foreground'
 									: 'text-muted-foreground transition-colors hover:text-foreground'
 							}

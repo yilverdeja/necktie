@@ -3,90 +3,49 @@ import { create } from 'zustand';
 import Doctor from '@/entities/Doctor';
 import Booking from '@/entities/Booking';
 
-import APIClient from './services/ApiClient';
-const doctorsClient = new APIClient<Doctor>('/doctor');
-const bookingsClient = new APIClient<Booking>('/booking');
-
 interface StoreState {
 	user: string;
 	doctorsById: { [key: string]: Doctor };
 	doctors: Doctor[];
+	doctorsLoaded: boolean;
 	bookings: Booking[];
 	userBookings: Booking[];
 	setUser: (newUser: string) => void;
-	fetchDoctors: () => Promise<void>;
-	fetchDoctorById: (doctorId: string) => Promise<Doctor | undefined>;
-	fetchBookings: () => Promise<void>;
-	addBooking: (booking: Partial<Booking>) => Promise<string | undefined>;
-	cancelBooking: (bookingId: string) => Promise<void>;
+	setDoctors: (doctors: Doctor[]) => void;
+	setBookings: (bookings: Booking[]) => void;
+	setDoctor: (doctor: Doctor) => void;
 }
 
-const useStore = create<StoreState>((set, get) => ({
+const useStore = create<StoreState>((set) => ({
 	user: 'Yil',
 	doctorsById: {},
 	doctors: [],
+	doctorsLoaded: false,
 	bookings: [],
 	userBookings: [],
 	setUser: (newUser) => {
 		set({ user: newUser });
 	},
-	fetchDoctors: async () => {
-		const doctors = await doctorsClient.getAll({});
-		if (!doctors) return;
+	setDoctors: (doctors) => {
 		const doctorsById = doctors.reduce(
-			(acc: { [key: string]: Doctor }, doctor) => {
-				acc[doctor.id] = doctor;
-				return acc;
-			},
+			(acc, doctor) => ({
+				...acc,
+				[doctor.id]: doctor,
+			}),
 			{}
 		);
-		set({ doctors, doctorsById });
+		set({ doctors, doctorsById, doctorsLoaded: true });
 	},
-	fetchDoctorById: async (doctorId) => {
-		const existingDoctor = get().doctors.find((doc) => doc.id === doctorId);
-		if (existingDoctor) {
-			return existingDoctor;
-		}
 
-		try {
-			const doctor = await doctorsClient.get(doctorId);
-			set({
-				doctors: [...get().doctors, doctor],
-				doctorsById: {
-					...get().doctorsById,
-					[doctorId]: doctor,
-				},
-			});
-			return doctor;
-		} catch (error) {
-			console.error('Failed to fetch doctor:', error);
-			return undefined;
-		}
-	},
-	fetchBookings: async () => {
-		const bookings = await bookingsClient.getAll({});
-		set({ bookings });
-	},
-	addBooking: async (booking) => {
-		const newBooking = await bookingsClient.create(booking);
-		if (!newBooking) return undefined;
-		set({ bookings: [...get().bookings, newBooking] });
-		return newBooking.id;
-	},
-	cancelBooking: async (bookingId) => {
-		const updatedBooking = await bookingsClient.patch(bookingId, {
-			status: 'cancelled',
-		});
-		if (!updatedBooking) return;
+	setDoctor: (doctor) =>
+		set((state) => ({
+			doctorsById: { ...state.doctorsById, [doctor.id]: doctor },
+			doctors: state.doctors.some((d) => d.id === doctor.id)
+				? state.doctors.map((d) => (d.id === doctor.id ? doctor : d))
+				: [...state.doctors, doctor],
+		})),
 
-		set({
-			bookings: get().bookings.map((booking) =>
-				booking.id === bookingId
-					? { ...booking, status: 'cancelled' }
-					: booking
-			),
-		});
-	},
+	setBookings: (bookings) => set({ bookings }),
 }));
 
 export default useStore;

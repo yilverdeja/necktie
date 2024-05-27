@@ -1,6 +1,6 @@
-import { Card } from '@/components/ui/card';
+import { Card } from '@/components/ui/Card';
 import Booking from '@/entities/Booking';
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/Button';
 import useStore from '@/store';
 import {
 	AlertDialog,
@@ -12,56 +12,21 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 	AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+} from '@/components/ui/AlertDialog';
+import { useBookings } from '@/hooks/useBookings';
+import { formatAddress, formatDateTime } from '@/utils/helper';
 
 interface Props {
 	booking: Booking;
 }
 
-const formatDateTime = (dateString: string, floatTime: number) => {
-	// Parse the date string
-	const [year, month, day] = dateString.split('-').map(Number);
-
-	// Calculate hours and minutes from the float time
-	const hours = Math.floor(floatTime);
-	const minutes = Math.round((floatTime - hours) * 60);
-
-	// Create a Date object (needed for formatting month name)
-	const date = new Date(year, month - 1, day);
-
-	// Format the time string
-	const timeString = `${hours}:${minutes.toString().padStart(2, '0')}`;
-
-	// Format the month name and ordinal day
-	const monthNames = [
-		'January',
-		'February',
-		'March',
-		'April',
-		'May',
-		'June',
-		'July',
-		'August',
-		'September',
-		'October',
-		'November',
-		'December',
-	];
-	const monthName = monthNames[date.getMonth()];
-	const dayOrdinal = `${day}${
-		['th', 'st', 'nd', 'rd'][((day % 10) - 1) % 10] || 'th'
-	}`;
-
-	// Format the full date string
-	const dateStringFormatted = `${monthName} ${dayOrdinal} ${year}`;
-
-	// Return the formatted string
-	return `${timeString}, ${dateStringFormatted}`;
-};
-
 const BookingListItem = ({ booking }: Props) => {
-	const { cancelBooking, doctorsById } = useStore();
+	const { doctorsById } = useStore();
+	const { cancelBooking } = useBookings(false);
 	const doctor = doctorsById[booking.doctorId];
+
+	if (!doctor) return <p>Doctor information is not available</p>;
+
 	return (
 		<Card className="flex flex-col justify-center p-4 sm:p-6 gap-4 sm:gap-6">
 			<div className="flex-1 grid gap-1">
@@ -72,11 +37,7 @@ const BookingListItem = ({ booking }: Props) => {
 					Dr. {doctor.name}
 				</p>
 				<p className="text-muted-foreground text-sm dark:text-gray-400">
-					{doctor.address.line_1}
-					{', '}
-					{doctor.address.line_2}
-					{', '}
-					{doctor.address.district}
+					{formatAddress(doctor.address)}
 				</p>
 			</div>
 			<div>
