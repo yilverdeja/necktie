@@ -16,6 +16,9 @@ interface Props {
 
 const DoctorBooking = ({ doctor }: Props) => {
 	const [selectedDate, setSelectedDate] = useState(new Date());
+	const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(
+		null
+	);
 	const dayOrder = { MON: 1, TUE: 2, WED: 3, THU: 4, FRI: 5, SAT: 6, SUN: 7 };
 
 	const generateTimeSlots = (
@@ -74,6 +77,7 @@ const DoctorBooking = ({ doctor }: Props) => {
 								selected={selectedDate}
 								onDayClick={(date) => {
 									setSelectedDate(date);
+									setSelectedTimeSlot(null);
 								}}
 								disabled={{ before: new Date() }}
 								mode="single"
@@ -85,9 +89,17 @@ const DoctorBooking = ({ doctor }: Props) => {
 						<div className="font-medium">
 							Select Available Timeslots
 						</div>
-						<BookingTimeSlots timeSlots={timeSlots} />
+						<BookingTimeSlots
+							timeSlots={timeSlots}
+							onSelectTimeSlot={setSelectedTimeSlot}
+							selectedTimeSlot={selectedTimeSlot}
+						/>
 					</div>
-					<Button className="w-full" size="lg">
+					<Button
+						className="w-full"
+						size="lg"
+						disabled={selectedTimeSlot === null}
+					>
 						Book Appointment
 					</Button>
 				</div>

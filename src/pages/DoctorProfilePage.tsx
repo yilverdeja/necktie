@@ -1,12 +1,14 @@
 import DoctorBooking from '@/components/DoctorBooking';
 import DoctorProfile from '@/components/DoctorProfile';
+import { Button } from '@/components/ui/button';
 import doctors from '@/data/doctors';
 import Doctor from '@/entities/Doctor';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const DoctorProfilePage = () => {
 	const { id } = useParams();
+	const navigate = useNavigate();
 	const [doctor, setDoctor] = useState<Doctor | null>(null);
 
 	useEffect(() => {
@@ -16,9 +18,16 @@ const DoctorProfilePage = () => {
 
 	if (!doctor) return <p>Doctor not available</p>;
 
+	const goHome = () => {
+		navigate('/');
+	};
+
 	return (
 		<>
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto p-4 lg:p-8">
+			<Button size="sm" onClick={goHome}>
+				Back to All Doctors
+			</Button>
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 				<div className="bg-white dark:bg-gray-950 rounded-lg shadow-lg p-6">
 					<DoctorProfile doctor={doctor} />
 				</div>
