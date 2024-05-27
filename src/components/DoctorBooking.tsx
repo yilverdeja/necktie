@@ -48,7 +48,7 @@ const DoctorBooking = ({ doctor }: Props) => {
 	const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(
 		null
 	);
-	const [loading, setLoading] = useState(false);
+	const [isLoading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 	const { toast } = useToast();
 
@@ -125,6 +125,9 @@ const DoctorBooking = ({ doctor }: Props) => {
 		newDate.setDate(newDate.getDate() + 1);
 		setSelectedDate(newDate);
 	};
+
+	if (isLoading) return <p>Loading...</p>;
+	if (error) return <p>{error}</p>;
 
 	return (
 		<>

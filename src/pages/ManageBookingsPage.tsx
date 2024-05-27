@@ -54,6 +54,7 @@ const ManageBookingsPage = () => {
 						} else if (!isACancelled && isBCancelled) {
 							return -1; // Keep a above b
 						}
+						return 0;
 					})
 					.map((booking, index) => (
 						<BookingListItem key={index} booking={booking} />

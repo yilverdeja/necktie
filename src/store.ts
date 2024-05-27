@@ -9,7 +9,7 @@ const bookingsClient = new APIClient<Booking>('/booking');
 
 interface StoreState {
 	user: string;
-	doctorsById: object;
+	doctorsById: { [key: string]: Doctor };
 	doctors: Doctor[];
 	bookings: Booking[];
 	userBookings: Booking[];
@@ -17,7 +17,7 @@ interface StoreState {
 	fetchDoctors: () => Promise<void>;
 	fetchDoctorById: (doctorId: string) => Promise<Doctor | undefined>;
 	fetchBookings: () => Promise<void>;
-	addBooking: (booking: Booking) => Promise<string | undefined>;
+	addBooking: (booking: Partial<Booking>) => Promise<string | undefined>;
 	cancelBooking: (bookingId: string) => Promise<void>;
 }
 
@@ -33,10 +33,13 @@ const useStore = create<StoreState>((set, get) => ({
 	fetchDoctors: async () => {
 		const doctors = await doctorsClient.getAll({});
 		if (!doctors) return;
-		const doctorsById = doctors.reduce((acc, doctor) => {
-			acc[doctor.id] = doctor;
-			return acc;
-		}, {});
+		const doctorsById = doctors.reduce(
+			(acc: { [key: string]: Doctor }, doctor) => {
+				acc[doctor.id] = doctor;
+				return acc;
+			},
+			{}
+		);
 		set({ doctors, doctorsById });
 	},
 	fetchDoctorById: async (doctorId) => {
@@ -66,7 +69,7 @@ const useStore = create<StoreState>((set, get) => ({
 	},
 	addBooking: async (booking) => {
 		const newBooking = await bookingsClient.create(booking);
-		if (!newBooking) return;
+		if (!newBooking) return undefined;
 		set({ bookings: [...get().bookings, newBooking] });
 		return newBooking.id;
 	},
@@ -76,13 +79,13 @@ const useStore = create<StoreState>((set, get) => ({
 		});
 		if (!updatedBooking) return;
 
-		const { bookings } = get();
-		const updatedBookings = bookings.map((booking) =>
-			booking.id === bookingId
-				? { ...booking, status: 'cancelled' }
-				: booking
-		);
-		set({ bookings: updatedBookings });
+		set({
+			bookings: get().bookings.map((booking) =>
+				booking.id === bookingId
+					? { ...booking, status: 'cancelled' }
+					: booking
+			),
+		});
 	},
 }));
 

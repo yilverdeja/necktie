@@ -27,13 +27,13 @@ class APIClient<T> {
 			.then((res) => res.data);
 	};
 
-	create = (data: T) => {
+	create = (data: Partial<T>) => {
 		return axiosInstance
 			.post<T>(this.endpoint, data)
 			.then((res) => res.data);
 	};
 
-	patch = (id: number | string, data: T) => {
+	patch = (id: number | string, data: Partial<T>) => {
 		return axiosInstance
 			.patch<T>(`${this.endpoint}/${id}`, data)
 			.then((res) => res.data);
