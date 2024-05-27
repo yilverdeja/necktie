@@ -2,14 +2,17 @@ import { create } from 'zustand';
 
 import Doctor from '@/entities/Doctor';
 import Booking from '@/entities/Booking';
-import doctors from './data/doctors';
+
+import APIClient from './services/ApiClient';
+const doctorsClient = new APIClient<Doctor>('/doctor');
+const bookingsClient = new APIClient<Booking>('/booking');
 
 interface StoreState {
 	doctors: Doctor[];
 	bookings: Booking[];
 	userBookings: Booking[];
-	fetchDoctors: () => void;
-	fetchBookings: () => void;
+	fetchDoctors: () => Promise<void>;
+	fetchBookings: () => Promise<void>;
 	addBooking: (booking: Booking) => void;
 	cancelBooking: (bookingId: string) => void;
 }
@@ -19,14 +22,12 @@ const useStore = create<StoreState>((set, get) => ({
 	bookings: [],
 	userBookings: [],
 	fetchDoctors: async () => {
-		setTimeout(() => {
-			set({ doctors: doctors });
-		}, 2000);
+		const doctors = await doctorsClient.getAll({});
+		set({ doctors });
 	},
 	fetchBookings: async () => {
-		setTimeout(() => {
-			set({ bookings: [] });
-		}, 2000);
+		const bookings = await bookingsClient.getAll({});
+		set({ bookings });
 	},
 	addBooking: (booking) => {
 		const { bookings } = get();

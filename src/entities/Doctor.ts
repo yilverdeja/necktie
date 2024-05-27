@@ -12,9 +12,9 @@ export interface OpeningHours {
 }
 
 export default interface Doctor {
-	id: string;
-	name: string;
-	description: string;
-	address: DoctorAddress;
-	opening_hours: OpeningHours[];
+	id?: string;
+	name?: string;
+	description?: string;
+	address?: DoctorAddress;
+	opening_hours?: OpeningHours[];
 }
