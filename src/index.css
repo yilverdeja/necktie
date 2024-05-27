@@ -74,7 +74,3 @@
 		@apply bg-background text-foreground;
 	}
 }
-
-#root {
-	margin: 2rem;
-}
