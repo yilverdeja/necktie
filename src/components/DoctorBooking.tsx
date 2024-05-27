@@ -10,6 +10,8 @@ import { CalendarDaysIcon, ChevronDownIcon } from 'lucide-react';
 import { useState } from 'react';
 import BookingTimeSlots from './BookingTimeSlots';
 import useStore from '@/store';
+import { useToast } from '@/components/ui/use-toast';
+import { ToastAction } from './ui/toast';
 
 interface Props {
 	doctor: Doctor;
@@ -46,13 +48,14 @@ interface TimeSlot {
 }
 
 const DoctorBooking = ({ doctor }: Props) => {
-	const { addBooking, user, bookings } = useStore();
+	const { addBooking, user, bookings, cancelBooking } = useStore();
 	const [selectedDate, setSelectedDate] = useState(new Date());
 	const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(
 		null
 	);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
+	const { toast } = useToast();
 
 	const dayOrder = { MON: 1, TUE: 2, WED: 3, THU: 4, FRI: 5, SAT: 6, SUN: 0 };
 
@@ -138,6 +141,7 @@ const DoctorBooking = ({ doctor }: Props) => {
 								onDayClick={(date) => {
 									setSelectedDate(date);
 									setSelectedTimeSlot(null);
+									setError('');
 								}}
 								disabled={{ before: new Date() }}
 								mode="single"
@@ -177,9 +181,28 @@ const DoctorBooking = ({ doctor }: Props) => {
 								doctorId: doctor.id,
 								date: convertDateToString(selectedDate),
 							})
-								.then(() => {
+								.then((bookingId) => {
 									setLoading(false);
 									setSelectedTimeSlot(null);
+									toast({
+										title: 'Appointment Booked!',
+										description: `${selectedDate.toLocaleString()} with Dr. ${
+											doctor.name
+										}`,
+										action: (
+											<ToastAction
+												altText="Cancel booking"
+												onClick={() => {
+													console.log(
+														'cancel booking'
+													);
+													cancelBooking(bookingId!);
+												}}
+											>
+												Cancel
+											</ToastAction>
+										),
+									});
 								})
 								.catch((err) => {
 									console.log(err);

@@ -15,7 +15,7 @@ interface StoreState {
 	fetchDoctors: () => Promise<void>;
 	fetchDoctorById: (doctorId: string) => Promise<Doctor | undefined>;
 	fetchBookings: () => Promise<void>;
-	addBooking: (booking: Booking) => Promise<void>;
+	addBooking: (booking: Booking) => Promise<string | undefined>;
 	cancelBooking: (bookingId: string) => Promise<void>;
 }
 
@@ -49,13 +49,20 @@ const useStore = create<StoreState>((set, get) => ({
 	},
 	addBooking: async (booking) => {
 		const newBooking = await bookingsClient.create(booking);
+		if (!newBooking) return;
 		set({ bookings: [...get().bookings, newBooking] });
+		return newBooking.id;
 	},
 	cancelBooking: async (bookingId) => {
+		const updatedBooking = await bookingsClient.patch(bookingId, {
+			status: 'cancelled',
+		});
+		if (!updatedBooking) return;
+
 		const { bookings } = get();
 		const updatedBookings = bookings.map((booking) =>
 			booking.id === bookingId
-				? { ...booking, status: 'cancel' }
+				? { ...booking, status: 'cancelled' }
 				: booking
 		);
 		set({ bookings: updatedBookings });
