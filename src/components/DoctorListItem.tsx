@@ -26,12 +26,8 @@ const DoctorListItem = ({ doctor }: Props) => {
 	return (
 		<Card className="flex items-center p-4 sm:p-6 gap-4 sm:gap-6">
 			<div className="flex-1 grid gap-1">
-				<h3 className="font-semibold text-lg">{doctor.name}</h3>
+				<h3 className="font-semibold text-lg">Dr. {doctor.name}</h3>
 				<p className="text-sm text-gray-500 dark:text-gray-400">
-					{doctor.address.line_1}
-					{', '}
-					{doctor.address.line_2}
-					{', '}
 					{doctor.address.district}
 				</p>
 				<div className="flex items-center gap-2 flex-wrap my-2">
