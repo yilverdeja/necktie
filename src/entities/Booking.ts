@@ -3,6 +3,6 @@ export default interface Booking {
 	name?: string;
 	start?: number;
 	doctorId?: string;
-	date?: Date;
+	date?: string;
 	status?: 'cancel' | 'confirmed';
 }

@@ -15,6 +15,25 @@ interface Props {
 	doctor: Doctor;
 }
 
+const convertDateToString = (date: Date) => {
+	const year = date.getFullYear().toString().padStart(2, '0');
+	const month = (date.getMonth() + 1).toString().padStart(2, '0');
+	const day = date.getDate().toString().padStart(2, '0');
+
+	return year + '-' + month + '-' + day;
+};
+
+const convertFloatTimeToTimeString = (stringTime: string): string => {
+	const floatTime = parseFloat(stringTime);
+	return convertFloatToTimeString(floatTime);
+};
+
+const convertFloatToTimeString = (floatTime: number): string => {
+	const hours = Math.floor(floatTime);
+	const minutes = Math.round((floatTime - hours) * 60);
+	return `${hours}:${minutes.toString().padStart(2, '0')}`;
+};
+
 const DoctorBooking = ({ doctor }: Props) => {
 	const { addBooking } = useStore();
 	const [selectedDate, setSelectedDate] = useState(new Date());
@@ -35,7 +54,8 @@ const DoctorBooking = ({ doctor }: Props) => {
 					time < parseFloat(hour.end);
 					time++
 				) {
-					slots.push(`${time}:00`);
+					// slots.push(`${time}:00`);
+					slots.push(convertFloatTimeToTimeString(time));
 				}
 			}
 		});
@@ -103,12 +123,10 @@ const DoctorBooking = ({ doctor }: Props) => {
 						disabled={selectedTimeSlot === null}
 						onClick={() => {
 							addBooking({
-								id: '123',
 								name: 'Yil',
-								start: '13.00',
-								doctorId: '123',
-								date: new Date(),
-								status: 'confirmed',
+								start: 17,
+								doctorId: 'M2159',
+								date: convertDateToString(selectedDate),
 							});
 						}}
 					>
