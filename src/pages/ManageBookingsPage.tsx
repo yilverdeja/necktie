@@ -1,13 +1,28 @@
 import BookingListItem from '@/components/BookingListItem';
 import useStore from '@/store';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const ManageBookingsPage = () => {
-	const { user, bookings, fetchBookings } = useStore();
+	const { user, bookings, fetchBookings, fetchDoctors } = useStore();
+	const [isLoading, setLoading] = useState(false);
+	const [error, setError] = useState('');
 
 	useEffect(() => {
-		fetchBookings();
-	}, [fetchBookings]);
+		setLoading(true);
+		setError('');
+
+		fetchBookings()
+			.then(() => fetchDoctors())
+			.then(() => setLoading(false))
+			.catch((error) => {
+				console.error(error);
+				setError('Failed to load data');
+				setLoading(false);
+			});
+	}, [fetchBookings, fetchDoctors]);
+
+	if (isLoading) return <p>Loading...</p>;
+	if (error) return <p>{error}</p>;
 
 	return (
 		<>

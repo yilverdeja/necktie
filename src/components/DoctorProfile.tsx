@@ -83,10 +83,15 @@ const DoctorProfile = ({ doctor }: Props) => {
 			<div className="flex items-center space-x-4">
 				<Avatar className="w-16 h-16">
 					<AvatarImage
-						alt="Dr. John Doe"
+						alt={`Dr. ${doctor.name}`}
 						src="/placeholder-avatar.jpg"
 					/>
-					<AvatarFallback>JD</AvatarFallback>
+					<AvatarFallback>
+						{doctor.name
+							?.split(' ')
+							.map((char) => char.substring(0, 1))
+							.join('')}
+					</AvatarFallback>
 				</Avatar>
 				<div>
 					<h2 className="text-2xl font-bold">Dr. {doctor?.name}</h2>
@@ -96,12 +101,14 @@ const DoctorProfile = ({ doctor }: Props) => {
 				</div>
 			</div>
 			<div className="mt-6 space-y-4">
-				<div>
-					<h3 className="text-lg font-semibold">About</h3>
-					<p className="text-gray-500 dark:text-gray-400">
-						{doctor?.description}
-					</p>
-				</div>
+				{doctor?.description.length > 0 && (
+					<div>
+						<h3 className="text-lg font-semibold">About</h3>
+						<p className="text-gray-500 dark:text-gray-400">
+							{doctor?.description}
+						</p>
+					</div>
+				)}
 				<div>
 					<h3 className="text-lg font-semibold">Open Hours</h3>
 					<div className="grid grid-cols-2 gap-2">
