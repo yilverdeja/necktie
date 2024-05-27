@@ -27,12 +27,16 @@ interface Props {
 
 const DoctorBooking = ({ doctor }: Props) => {
 	const { user, bookings } = useStore();
-	const { addBooking, cancelBooking } = useBookings(false);
+	const {
+		addBooking,
+		cancelBooking,
+		loading,
+		error: bookingsError,
+	} = useBookings(false);
 	const [selectedDate, setSelectedDate] = useState(new Date());
 	const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(
 		null
 	);
-	const [isLoading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 	const { toast } = useToast();
 
@@ -109,7 +113,6 @@ const DoctorBooking = ({ doctor }: Props) => {
 	}, [selectedDate]);
 
 	// TODO: manage loading and error states better
-	if (isLoading) return <p>Loading...</p>;
 	if (error) return <p>{error}</p>;
 
 	return (
@@ -182,7 +185,6 @@ const DoctorBooking = ({ doctor }: Props) => {
 						disabled={selectedTimeSlot === null}
 						onClick={() => {
 							setError('');
-							setLoading(true);
 							addBooking({
 								name: user,
 								start: convertTimeStringToFloat(
@@ -192,7 +194,6 @@ const DoctorBooking = ({ doctor }: Props) => {
 								date: convertDateToString(selectedDate),
 							})
 								.then((bookingId) => {
-									setLoading(false);
 									setSelectedTimeSlot(null);
 									toast({
 										title: 'Appointment Booked!',
@@ -225,11 +226,10 @@ const DoctorBooking = ({ doctor }: Props) => {
 												: errMessage,
 									});
 									setError(errMessage);
-									setLoading(false);
 								});
 						}}
 					>
-						Book Appointment
+						{loading ? 'Loading...' : 'Book Appointment'}
 					</Button>
 				</div>
 			</div>
