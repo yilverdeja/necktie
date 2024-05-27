@@ -1,6 +1,6 @@
-import { Card } from '@/components/ui/card';
+import { Card } from '@/components/ui/Card';
 import Booking from '@/entities/Booking';
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/Button';
 import useStore from '@/store';
 import {
 	AlertDialog,
@@ -12,7 +12,7 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 	AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+} from '@/components/ui/AlertDialog';
 import { useBookings } from '@/hooks/useBookings';
 import { formatAddress } from '@/utils/helper';
 

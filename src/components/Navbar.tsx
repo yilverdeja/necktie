@@ -1,7 +1,7 @@
 import { CircleUser, Menu, SparkleIcon } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { Button } from './ui/button';
-import { Sheet, SheetTrigger, SheetContent } from './ui/sheet';
+import { Button } from '@/components/ui/Button';
+import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/Sheet';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -9,7 +9,7 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from './ui/dropdown-menu';
+} from '@/components/ui/DropdownMenu';
 import useStore from '@/store';
 import { BOOKING_ROUTE_PATH, HOME_ROUTE_PATH } from '@/utils/const';
 

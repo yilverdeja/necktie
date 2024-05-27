@@ -1,7 +1,7 @@
-import { Card } from '@/components/ui/card';
+import { Card } from '@/components/ui/Card';
 import Doctor from '@/entities/Doctor';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
+import { Button } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/Badge';
 import { UserRoundX } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { DAY_ORDER_1, DOCTOR_ROUTE_PATH } from '@/utils/const';
