@@ -1,14 +1,29 @@
 import Doctor from '@/entities/Doctor';
 import DoctorListItem from '../components/DoctorListItem';
 import useStore from '@/store';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const HomePage = () => {
 	const { doctors, fetchDoctors } = useStore();
+	const [isLoading, setLoading] = useState(false);
+	const [error, setError] = useState('');
 
 	useEffect(() => {
-		fetchDoctors();
+		setLoading(true);
+		setError('');
+		fetchDoctors()
+			.then(() => {
+				setLoading(false);
+			})
+			.catch((error) => {
+				console.error(error);
+				setError('Failed to load data');
+				setLoading(false);
+			});
 	}, [fetchDoctors]);
+
+	if (isLoading) return <p>Loading...</p>;
+	if (error) return <p>{error}</p>;
 
 	return (
 		<>

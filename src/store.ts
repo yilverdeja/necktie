@@ -9,9 +9,11 @@ const bookingsClient = new APIClient<Booking>('/booking');
 
 interface StoreState {
 	user: string;
+	doctorsById: object;
 	doctors: Doctor[];
 	bookings: Booking[];
 	userBookings: Booking[];
+	setUser: (newUser: string) => void;
 	fetchDoctors: () => Promise<void>;
 	fetchDoctorById: (doctorId: string) => Promise<Doctor | undefined>;
 	fetchBookings: () => Promise<void>;
@@ -21,12 +23,21 @@ interface StoreState {
 
 const useStore = create<StoreState>((set, get) => ({
 	user: 'Yil',
+	doctorsById: {},
 	doctors: [],
 	bookings: [],
 	userBookings: [],
+	setUser: (newUser) => {
+		set({ user: newUser });
+	},
 	fetchDoctors: async () => {
 		const doctors = await doctorsClient.getAll({});
-		set({ doctors });
+		if (!doctors) return;
+		const doctorsById = doctors.reduce((acc, doctor) => {
+			acc[doctor.id] = doctor;
+			return acc;
+		}, {});
+		set({ doctors, doctorsById });
 	},
 	fetchDoctorById: async (doctorId) => {
 		const existingDoctor = get().doctors.find((doc) => doc.id === doctorId);
@@ -36,7 +47,13 @@ const useStore = create<StoreState>((set, get) => ({
 
 		try {
 			const doctor = await doctorsClient.get(doctorId);
-			set({ doctors: [...get().doctors, doctor] });
+			set({
+				doctors: [...get().doctors, doctor],
+				doctorsById: {
+					...get().doctorsById,
+					[doctorId]: doctor,
+				},
+			});
 			return doctor;
 		} catch (error) {
 			console.error('Failed to fetch doctor:', error);

@@ -1,10 +1,9 @@
 import DoctorBooking from '@/components/DoctorBooking';
 import DoctorProfile from '@/components/DoctorProfile';
-import { Button } from '@/components/ui/button';
 import Doctor from '@/entities/Doctor';
 import useStore from '@/store';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const DoctorProfilePage = () => {
 	const { id } = useParams();
@@ -12,7 +11,6 @@ const DoctorProfilePage = () => {
 		fetchDoctorById: state.fetchDoctorById,
 		fetchBookings: state.fetchBookings,
 	}));
-	const navigate = useNavigate();
 	const [doctor, setDoctor] = useState<Doctor | null>(null);
 	const [isLoading, setLoading] = useState(false);
 	const [error, setError] = useState('');
@@ -43,15 +41,8 @@ const DoctorProfilePage = () => {
 	if (isLoading) return <p>Loading doctor...</p>;
 	if (error) return <p>{error}</p>;
 
-	const goHome = () => {
-		navigate('/');
-	};
-
 	return (
 		<>
-			<Button size="sm" onClick={goHome}>
-				Back to All Doctors
-			</Button>
 			{doctor && (
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 					<div className="bg-white dark:bg-gray-950 rounded-lg shadow-lg p-6">

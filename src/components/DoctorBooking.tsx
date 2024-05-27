@@ -25,11 +25,6 @@ const convertDateToString = (date: Date) => {
 	return year + '-' + month + '-' + day;
 };
 
-const convertFloatTimeToTimeString = (stringTime: string): string => {
-	const floatTime = parseFloat(stringTime);
-	return convertFloatToTimeString(floatTime);
-};
-
 const convertFloatToTimeString = (floatTime: number): string => {
 	const hours = Math.floor(floatTime);
 	const minutes = Math.round((floatTime - hours) * 60);
@@ -108,6 +103,29 @@ const DoctorBooking = ({ doctor }: Props) => {
 		selectedDate.getDay()
 	);
 
+	// Check if selectedDate is today's date
+	const isToday = (date: Date) => {
+		const today = new Date();
+		return (
+			date.getMonth() === today.getMonth() &&
+			date.getFullYear() === today.getFullYear() &&
+			date.getDate() === today.getDate()
+		);
+	};
+
+	// Handlers for previous and next date buttons
+	const handlePrev = () => {
+		const newDate = new Date(selectedDate);
+		newDate.setDate(newDate.getDate() - 1);
+		setSelectedDate(newDate);
+	};
+
+	const handleNext = () => {
+		const newDate = new Date(selectedDate);
+		newDate.setDate(newDate.getDate() + 1);
+		setSelectedDate(newDate);
+	};
+
 	return (
 		<>
 			<div className="flex flex-col gap-6">
@@ -120,35 +138,48 @@ const DoctorBooking = ({ doctor }: Props) => {
 				</div>
 				<div className="grid gap-4">
 					<div className="font-medium">Select Booking Date</div>
-					<Popover>
-						<PopoverTrigger asChild>
-							<Button
-								className="w-full flex items-center justify-between"
-								variant="outline"
-							>
-								<div className="flex items-center gap-2">
-									<CalendarDaysIcon className="w-5 h-5" />
-									<span>
-										{selectedDate.toLocaleDateString()}
-									</span>
-								</div>
-								<ChevronDownIcon className="w-5 h-5" />
-							</Button>
-						</PopoverTrigger>
-						<PopoverContent className="p-0 w-[300px]">
-							<Calendar
-								selected={selectedDate}
-								onDayClick={(date) => {
-									setSelectedDate(date);
-									setSelectedTimeSlot(null);
-									setError('');
-								}}
-								disabled={{ before: new Date() }}
-								mode="single"
-								required
-							/>
-						</PopoverContent>
-					</Popover>
+
+					<div className="flex flex-row justify-end items-center gap-1">
+						<Popover>
+							<PopoverTrigger asChild>
+								<Button
+									className="w-full flex items-center justify-between"
+									variant="outline"
+								>
+									<div className="flex items-center gap-2">
+										<CalendarDaysIcon className="w-5 h-5" />
+										<span>
+											{selectedDate.toLocaleDateString()}
+										</span>
+									</div>
+									<ChevronDownIcon className="w-5 h-5" />
+								</Button>
+							</PopoverTrigger>
+							<PopoverContent className="p-0 w-[300px]">
+								<Calendar
+									selected={selectedDate}
+									onDayClick={(date) => {
+										setSelectedDate(date);
+										setSelectedTimeSlot(null);
+										setError('');
+									}}
+									disabled={{ before: new Date() }}
+									mode="single"
+									required
+								/>
+							</PopoverContent>
+						</Popover>
+						<Button
+							size="sm"
+							disabled={isToday(selectedDate)}
+							onClick={handlePrev}
+						>
+							Prev
+						</Button>
+						<Button size="sm" onClick={handleNext}>
+							Next
+						</Button>
+					</div>
 					<div className="grid gap-2">
 						<div className="font-medium">
 							Select Available Timeslots
