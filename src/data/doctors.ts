@@ -12,7 +12,7 @@ export default [
 			{
 				day: 'TUE',
 				end: '19.50',
-				isClosed: false,
+				isClosed: true,
 				start: '9.50',
 			},
 			{
@@ -36,7 +36,7 @@ export default [
 			{
 				day: 'THU',
 				end: '19.50',
-				isClosed: false,
+				isClosed: true,
 				start: '9.50',
 			},
 			{
@@ -174,43 +174,43 @@ export default [
 			{
 				day: 'WED',
 				end: '19.00',
-				isClosed: false,
+				isClosed: true,
 				start: '9.00',
 			},
 			{
 				day: 'FRI',
 				end: '19.00',
-				isClosed: false,
+				isClosed: true,
 				start: '9.00',
 			},
 			{
 				day: 'MON',
 				end: '19.00',
-				isClosed: false,
+				isClosed: true,
 				start: '9.00',
 			},
 			{
 				day: 'TUE',
 				end: '19.00',
-				isClosed: false,
+				isClosed: true,
 				start: '9.00',
 			},
 			{
 				day: 'THU',
 				end: '19.00',
-				isClosed: false,
+				isClosed: true,
 				start: '9.00',
 			},
 			{
 				day: 'SAT',
 				end: '19.00',
-				isClosed: false,
+				isClosed: true,
 				start: '9.00',
 			},
 			{
 				day: 'SUN',
 				end: '19.00',
-				isClosed: false,
+				isClosed: true,
 				start: '9.00',
 			},
 		],
