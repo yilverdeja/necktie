@@ -4,14 +4,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 import DoctorListItem from '../components/DoctorListItem';
 
 const HomePage = () => {
-	const { doctors, isLoading, error } = useDoctors();
+	const { doctors, loading, error } = useDoctors();
 	const skeletons = [1, 2, 3, 4, 5];
 
 	if (error)
 		return (
 			<section>
 				<h1 className="text-3xl my-4">Error Finding Doctors</h1>
-				<p className="text-lg py-2">Error Message: {error}</p>
+				<p className="text-lg py-2">Error Message: {error.message}</p>
 			</section>
 		);
 
@@ -19,7 +19,7 @@ const HomePage = () => {
 		<section>
 			<h1 className="text-3xl my-4">Find Doctors</h1>
 			<div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-				{isLoading
+				{loading
 					? skeletons.map((skeleton) => (
 							<div
 								key={skeleton}

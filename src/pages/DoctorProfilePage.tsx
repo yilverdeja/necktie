@@ -1,44 +1,22 @@
 import DoctorBooking from '@/components/DoctorBooking';
 import DoctorProfile from '@/components/DoctorProfile';
-import Doctor from '@/entities/Doctor';
-import useStore from '@/store';
-import { useEffect, useState } from 'react';
+import { useBookings } from '@/hooks/useBookings';
+import { useDoctor } from '@/hooks/useDoctor';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 const DoctorProfilePage = () => {
 	const { id } = useParams();
-	const { fetchDoctorById, fetchBookings } = useStore((state) => ({
-		fetchDoctorById: state.fetchDoctorById,
-		fetchBookings: state.fetchBookings,
-	}));
-	const [doctor, setDoctor] = useState<Doctor | null>(null);
-	const [isLoading, setLoading] = useState(false);
-	const [error, setError] = useState('');
+	const { doctor, loading, error } = useDoctor(id!);
+	const { refetch: fetchBookings } = useBookings(false);
 
 	useEffect(() => {
-		setLoading(true);
-		fetchDoctorById(id!)
-			.then((fetchedDoctor) => {
-				if (!fetchedDoctor) {
-					setError('Doctor does not exist');
-					setDoctor(null);
-				} else {
-					setDoctor(fetchedDoctor);
-					setError('');
-					fetchBookings();
-				}
-				setLoading(false);
-			})
-			.catch(() => {
-				setError('Failed to fetch doctor details');
-				setLoading(false);
-			})
-			.finally(() => {
-				setLoading(false);
-			});
-	}, [id, fetchDoctorById, fetchBookings]);
+		if (doctor) {
+			fetchBookings();
+		}
+	}, [doctor, fetchBookings]);
 
-	if (isLoading) return <p>Loading doctor...</p>;
+	if (loading) return <p>Loading doctor...</p>;
 	if (error) throw error;
 
 	return (

@@ -12,6 +12,7 @@ import BookingTimeSlots from './BookingTimeSlots';
 import useStore from '@/store';
 import { useToast } from '@/components/ui/use-toast';
 import { ToastAction } from './ui/toast';
+import { useBookings } from '@/hooks/useBookings';
 
 interface Props {
 	doctor: Doctor;
@@ -43,7 +44,8 @@ interface TimeSlot {
 }
 
 const DoctorBooking = ({ doctor }: Props) => {
-	const { addBooking, user, bookings, cancelBooking } = useStore();
+	const { user, bookings } = useStore();
+	const { addBooking, cancelBooking } = useBookings(false);
 	const [selectedDate, setSelectedDate] = useState(new Date());
 	const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(
 		null
@@ -126,6 +128,7 @@ const DoctorBooking = ({ doctor }: Props) => {
 		setSelectedDate(newDate);
 	};
 
+	// TODO: manage loading and error states better
 	if (isLoading) return <p>Loading...</p>;
 	if (error) return <p>{error}</p>;
 

@@ -5,18 +5,19 @@ import Doctor from '@/entities/Doctor';
 
 const doctorsClient = new APIClient<Doctor>('/doctor');
 
-const useDoctors = (fetchOnMount: boolean = true) => {
+export const useDoctor = (doctorId: string, fetchOnMount: boolean = true) => {
+	const [doctor, setDoc] = useState<Doctor | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<Error | null>(null);
-	const doctors = useStore((state) => state.doctors);
-	const setDoctors = useStore((state) => state.setDoctors);
+	const setDoctor = useStore((state) => state.setDoctor);
 
-	const getDoctors = useCallback(async () => {
+	const getDoctorById = useCallback(async () => {
 		setLoading(true);
 		setError(null);
 		try {
-			const fetchedDoctors = await doctorsClient.getAll();
-			setDoctors(fetchedDoctors);
+			const fetchedDoctor = await doctorsClient.get(doctorId);
+			setDoc(fetchedDoctor);
+			setDoctor(fetchedDoctor);
 			setLoading(false);
 		} catch (err) {
 			if (err instanceof Error) {
@@ -28,20 +29,16 @@ const useDoctors = (fetchOnMount: boolean = true) => {
 		} finally {
 			setLoading(false);
 		}
-	}, [setDoctors]);
+	}, [setDoctor, doctorId]);
 
 	useEffect(() => {
-		if (fetchOnMount) {
-			getDoctors();
-		}
-	}, [getDoctors, fetchOnMount]);
+		if (fetchOnMount) getDoctorById();
+	}, [getDoctorById, fetchOnMount]);
 
 	return {
-		doctors,
+		doctor,
+		refetch: getDoctorById,
 		loading,
 		error,
-		refetch: getDoctors,
 	};
 };
-
-export default useDoctors;

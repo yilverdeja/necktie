@@ -13,6 +13,7 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { useBookings } from '@/hooks/useBookings';
 
 interface Props {
 	booking: Booking;
@@ -60,7 +61,8 @@ const formatDateTime = (dateString: string, floatTime: number) => {
 };
 
 const BookingListItem = ({ booking }: Props) => {
-	const { cancelBooking, doctorsById } = useStore();
+	const { doctorsById } = useStore();
+	const { cancelBooking } = useBookings(false);
 	const doctor = doctorsById[booking.doctorId];
 	return (
 		<Card className="flex flex-col justify-center p-4 sm:p-6 gap-4 sm:gap-6">

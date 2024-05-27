@@ -1,28 +1,34 @@
 import BookingListItem from '@/components/BookingListItem';
+import { useBookings } from '@/hooks/useBookings';
+import useDoctors from '@/hooks/useDoctors';
 import useStore from '@/store';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 const ManageBookingsPage = () => {
-	const { user, bookings, fetchBookings, fetchDoctors } = useStore();
-	const [isLoading, setLoading] = useState(false);
-	const [error, setError] = useState('');
+	const { user, bookings } = useStore();
+	const {
+		refetch: fetchBookings,
+		loading: loadingBookings,
+		error: errorBookings,
+	} = useBookings(false);
+	const {
+		refetch: fetchDoctors,
+		loading: loadingDoctors,
+		error: errorDoctors,
+	} = useDoctors(false);
 
 	useEffect(() => {
-		setLoading(true);
-		setError('');
-
-		fetchBookings()
-			.then(() => fetchDoctors())
-			.then(() => setLoading(false))
-			.catch((error) => {
-				console.error(error);
-				setError('Failed to load data');
-				setLoading(false);
-			});
+		fetchBookings();
+		fetchDoctors();
 	}, [fetchBookings, fetchDoctors]);
 
+	// TODO: Improve loading and error
+	// Combine loading and error states
+	const isLoading = loadingBookings || loadingDoctors;
+	const error = errorBookings || errorDoctors;
+
 	if (isLoading) return <p>Loading...</p>;
-	if (error) return <p>{error}</p>;
+	if (error) return <p>Error: {error.message}</p>;
 
 	return (
 		<>
