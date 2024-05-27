@@ -159,13 +159,6 @@ const DoctorBooking = ({ doctor }: Props) => {
 							selectedTimeSlot={selectedTimeSlot}
 						/>
 					</div>
-					{error && (
-						<p className="text-red-500">
-							{error === 'invalid booking'
-								? 'Unable to make booking at this time'
-								: error}
-						</p>
-					)}
 					<Button
 						className="w-full"
 						size="lg"
@@ -205,8 +198,16 @@ const DoctorBooking = ({ doctor }: Props) => {
 									});
 								})
 								.catch((err) => {
-									console.log(err);
-									setError(err.response.data);
+									const errMessage = err.response.data;
+									toast({
+										variant: 'destructive',
+										title: 'Error making booking!',
+										description:
+											errMessage === 'invalid booking'
+												? 'Unable to make a booking at this slot'
+												: errMessage,
+									});
+									setError(errMessage);
 									setLoading(false);
 								});
 						}}
