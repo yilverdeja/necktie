@@ -4,7 +4,7 @@ interface DoctorAddress {
 	district: string;
 }
 
-interface OpeningHours {
+export interface OpeningHours {
 	start: string;
 	end: string;
 	isClosed: boolean;
@@ -12,9 +12,9 @@ interface OpeningHours {
 }
 
 export default interface Doctor {
-	id: string;
-	name: string;
-	description: string;
-	address: DoctorAddress;
-	opening_hours: OpeningHours[];
+	id?: string;
+	name?: string;
+	description?: string;
+	address?: DoctorAddress;
+	opening_hours?: OpeningHours[];
 }

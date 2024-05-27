@@ -12,12 +12,12 @@ export default [
 			{
 				day: 'TUE',
 				end: '19.50',
-				isClosed: true,
+				isClosed: false,
 				start: '9.50',
 			},
 			{
 				day: 'FRI',
-				end: '19.50',
+				end: '11.30',
 				isClosed: false,
 				start: '9.50',
 			},
@@ -47,7 +47,7 @@ export default [
 			},
 			{
 				day: 'SAT',
-				end: '19.50',
+				end: '11.30',
 				isClosed: false,
 				start: '9.50',
 			},
