@@ -1,40 +1,43 @@
-import Doctor from '@/entities/Doctor';
+/* eslint-disable no-mixed-spaces-and-tabs */
+import useDoctors from '@/hooks/useDoctors';
+import { Skeleton } from '@/components/ui/skeleton';
 import DoctorListItem from '../components/DoctorListItem';
-import useStore from '@/store';
-import { useEffect, useState } from 'react';
 
 const HomePage = () => {
-	const { doctors, fetchDoctors } = useStore();
-	const [isLoading, setLoading] = useState(false);
-	const [error, setError] = useState('');
+	const { doctors, isLoading, error } = useDoctors();
+	const skeletons = [1, 2, 3, 4, 5];
 
-	useEffect(() => {
-		setLoading(true);
-		setError('');
-		fetchDoctors()
-			.then(() => {
-				setLoading(false);
-			})
-			.catch((error) => {
-				console.error(error);
-				setError('Failed to load data');
-				setLoading(false);
-			});
-	}, [fetchDoctors]);
-
-	if (isLoading) return <p>Loading...</p>;
-	if (error) return <p>{error}</p>;
+	if (error)
+		return (
+			<section>
+				<h1 className="text-3xl my-4">Error Finding Doctors</h1>
+				<p className="text-lg py-2">Error Message: {error}</p>
+			</section>
+		);
 
 	return (
-		<>
+		<section>
 			<h1 className="text-3xl my-4">Find Doctors</h1>
-
 			<div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-				{doctors.map((doctor, index) => (
-					<DoctorListItem key={index} doctor={doctor as Doctor} />
-				))}
+				{isLoading
+					? skeletons.map((skeleton) => (
+							<div
+								key={skeleton}
+								className="flex items-center p-4 sm:p-6 gap-4 sm:gap-6"
+							>
+								<div className="flex-1 grid gap-1">
+									<Skeleton className="h-8 max-w-60 min-w-40" />
+									<Skeleton className="h-4 max-w-40 min-w-32" />
+									<Skeleton className="h-12 max-w-52 min-w-40" />
+								</div>
+								<Skeleton className="w-40 h-10" />
+							</div>
+					  ))
+					: doctors.map((doctor) => (
+							<DoctorListItem key={doctor.id} doctor={doctor} />
+					  ))}
 			</div>
-		</>
+		</section>
 	);
 };
 
