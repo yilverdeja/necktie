@@ -9,12 +9,14 @@ import Doctor, { OpeningHours } from '@/entities/Doctor';
 import { CalendarDaysIcon, ChevronDownIcon } from 'lucide-react';
 import { useState } from 'react';
 import BookingTimeSlots from './BookingTimeSlots';
+import useStore from '@/store';
 
 interface Props {
 	doctor: Doctor;
 }
 
 const DoctorBooking = ({ doctor }: Props) => {
+	const { addBooking } = useStore();
 	const [selectedDate, setSelectedDate] = useState(new Date());
 	const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(
 		null
@@ -99,6 +101,16 @@ const DoctorBooking = ({ doctor }: Props) => {
 						className="w-full"
 						size="lg"
 						disabled={selectedTimeSlot === null}
+						onClick={() => {
+							addBooking({
+								id: '123',
+								name: 'Yil',
+								start: '13.00',
+								doctorId: '123',
+								date: new Date(),
+								status: 'confirmed',
+							});
+						}}
 					>
 						Book Appointment
 					</Button>
