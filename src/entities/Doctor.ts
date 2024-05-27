@@ -1,4 +1,4 @@
-interface DoctorAddress {
+export interface DoctorAddress {
 	line_1: string;
 	line_2: string;
 	district: string;

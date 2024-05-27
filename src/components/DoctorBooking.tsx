@@ -13,6 +13,7 @@ import useStore from '@/store';
 import { useToast } from '@/components/ui/use-toast';
 import { ToastAction } from './ui/toast';
 import { useBookings } from '@/hooks/useBookings';
+import { DAY_ORDER_0 } from '@/utils/const';
 
 interface Props {
 	doctor: Doctor;
@@ -54,8 +55,6 @@ const DoctorBooking = ({ doctor }: Props) => {
 	const [error, setError] = useState('');
 	const { toast } = useToast();
 
-	const dayOrder = { MON: 1, TUE: 2, WED: 3, THU: 4, FRI: 5, SAT: 6, SUN: 0 };
-
 	const doctorBookings = bookings.filter(
 		(booking) =>
 			booking.doctorId === doctor.id && booking.status === 'confirmed'
@@ -67,7 +66,7 @@ const DoctorBooking = ({ doctor }: Props) => {
 	): TimeSlot[] => {
 		const slots: TimeSlot[] = [];
 		hours.forEach((hour) => {
-			if (!hour.isClosed && dayOrder[hour.day] === day) {
+			if (!hour.isClosed && DAY_ORDER_0[hour.day] === day) {
 				for (
 					let time = parseFloat(hour.start);
 					time < parseFloat(hour.end);

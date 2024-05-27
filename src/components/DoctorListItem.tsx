@@ -4,6 +4,7 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { UserRoundX } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { DAY_ORDER_1, DOCTOR_ROUTE_PATH } from '@/utils/const';
 
 interface Props {
 	doctor: Doctor;
@@ -11,16 +12,15 @@ interface Props {
 
 const DoctorListItem = ({ doctor }: Props) => {
 	const navigate = useNavigate();
-	const dayOrder = { MON: 1, TUE: 2, WED: 3, THU: 4, FRI: 5, SAT: 6, SUN: 7 };
 
 	const sortedOpeningHours = doctor.opening_hours.sort(
-		(a, b) => dayOrder[a.day] - dayOrder[b.day]
+		(a, b) => DAY_ORDER_1[a.day] - DAY_ORDER_1[b.day]
 	);
 
 	const openDays = sortedOpeningHours.filter((hour) => !hour.isClosed);
 
 	const goDoctorProfile = () => {
-		navigate(`/doctors/${doctor.id}`);
+		navigate(DOCTOR_ROUTE_PATH(doctor.id));
 	};
 
 	return (

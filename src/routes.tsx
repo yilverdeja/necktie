@@ -5,10 +5,15 @@ import ErrorPage from './pages/ErrorPage';
 import DoctorProfilePage from './pages/DoctorProfilePage';
 import ManageBookingsPage from './pages/ManageBookingsPage';
 import ErrorDoctorProfilePage from './pages/ErrorDoctorProfilePage';
+import {
+	BOOKING_ROUTE_PATH,
+	DOCTOR_ROUTE_PATH,
+	HOME_ROUTE_PATH,
+} from './utils/const';
 
 const router = createBrowserRouter([
 	{
-		path: '/',
+		path: HOME_ROUTE_PATH,
 		element: <Layout />,
 		errorElement: <ErrorPage />,
 		children: [
@@ -17,12 +22,12 @@ const router = createBrowserRouter([
 				element: <HomePage />,
 			},
 			{
-				path: '/doctors/:id',
+				path: DOCTOR_ROUTE_PATH(':id'),
 				errorElement: <ErrorDoctorProfilePage />,
 				element: <DoctorProfilePage />,
 			},
 			{
-				path: '/bookings',
+				path: BOOKING_ROUTE_PATH,
 				element: <ManageBookingsPage />,
 			},
 		],

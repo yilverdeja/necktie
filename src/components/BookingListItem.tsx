@@ -14,6 +14,7 @@ import {
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useBookings } from '@/hooks/useBookings';
+import { formatAddress } from '@/utils/helper';
 
 interface Props {
 	booking: Booking;
@@ -77,11 +78,7 @@ const BookingListItem = ({ booking }: Props) => {
 					Dr. {doctor.name}
 				</p>
 				<p className="text-muted-foreground text-sm dark:text-gray-400">
-					{doctor.address.line_1}
-					{', '}
-					{doctor.address.line_2}
-					{', '}
-					{doctor.address.district}
+					{formatAddress(doctor.address)}
 				</p>
 			</div>
 			<div>
