@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage';
 import ErrorPage from './pages/ErrorPage';
 import DoctorProfilePage from './pages/DoctorProfilePage';
 import ManageBookingsPage from './pages/ManageBookingsPage';
+import ErrorDoctorProfilePage from './pages/ErrorDoctorProfilePage';
 
 const router = createBrowserRouter([
 	{
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: '/doctors/:id',
+				errorElement: <ErrorDoctorProfilePage />,
 				element: <DoctorProfilePage />,
 			},
 			{

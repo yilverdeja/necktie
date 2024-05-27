@@ -39,7 +39,7 @@ const DoctorProfilePage = () => {
 	}, [id, fetchDoctorById, fetchBookings]);
 
 	if (isLoading) return <p>Loading doctor...</p>;
-	if (error) return <p>{error}</p>;
+	if (error) throw error;
 
 	return (
 		<>
