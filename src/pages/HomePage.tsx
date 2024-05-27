@@ -15,8 +15,8 @@ const HomePage = () => {
 			<h1 className="text-3xl my-4">Find Doctors</h1>
 
 			<div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-				{doctors.map((doctor) => (
-					<DoctorListItem key={doctor.id} doctor={doctor as Doctor} />
+				{doctors.map((doctor, index) => (
+					<DoctorListItem key={index} doctor={doctor as Doctor} />
 				))}
 			</div>
 		</>

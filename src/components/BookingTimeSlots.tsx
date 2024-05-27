@@ -1,7 +1,12 @@
 import { Button } from './ui/button';
 
+interface TimeSlot {
+	slot: string;
+	isAvailable: boolean;
+}
+
 interface Props {
-	timeSlots: string[];
+	timeSlots: TimeSlot[];
 	selectedTimeSlot: string | null;
 	onSelectTimeSlot: (selectedSlot: string) => void;
 }
@@ -19,11 +24,14 @@ const BookingTimeSlots = ({
 						key={index}
 						size="sm"
 						variant={
-							selectedTimeSlot === slot ? 'default' : 'outline'
+							selectedTimeSlot === slot.slot
+								? 'default'
+								: 'outline'
 						}
-						onClick={() => onSelectTimeSlot(slot)}
+						onClick={() => onSelectTimeSlot(slot.slot)}
+						disabled={!slot.isAvailable}
 					>
-						{slot}
+						{slot.slot}
 					</Button>
 				))
 			) : (

@@ -34,19 +34,27 @@ const convertFloatToTimeString = (floatTime: number): string => {
 	return `${hours}:${minutes.toString().padStart(2, '0')}`;
 };
 
+interface TimeSlot {
+	slot: string;
+	isAvailable: boolean;
+}
+
 const DoctorBooking = ({ doctor }: Props) => {
-	const { addBooking } = useStore();
+	const { addBooking, user } = useStore();
 	const [selectedDate, setSelectedDate] = useState(new Date());
 	const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(
 		null
 	);
-	const dayOrder = { MON: 1, TUE: 2, WED: 3, THU: 4, FRI: 5, SAT: 6, SUN: 7 };
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState('');
+
+	const dayOrder = { MON: 1, TUE: 2, WED: 3, THU: 4, FRI: 5, SAT: 6, SUN: 0 };
 
 	const generateTimeSlots = (
 		hours: OpeningHours[],
 		day: number
-	): string[] => {
-		const slots: string[] = [];
+	): TimeSlot[] => {
+		const slots: TimeSlot[] = [];
 		hours.forEach((hour) => {
 			if (!hour.isClosed && dayOrder[hour.day] === day) {
 				for (
@@ -54,13 +62,18 @@ const DoctorBooking = ({ doctor }: Props) => {
 					time < parseFloat(hour.end);
 					time++
 				) {
-					// slots.push(`${time}:00`);
-					slots.push(convertFloatTimeToTimeString(time));
+					slots.push({
+						slot: convertFloatToTimeString(time),
+						isAvailable: true,
+					});
 				}
 			}
 		});
 		return slots;
 	};
+
+	// gets bookings by doctor
+	// gets current time
 
 	const timeSlots = generateTimeSlots(
 		doctor.opening_hours,
@@ -117,17 +130,28 @@ const DoctorBooking = ({ doctor }: Props) => {
 							selectedTimeSlot={selectedTimeSlot}
 						/>
 					</div>
+					{error && <p className="text-red-500">{error}</p>}
 					<Button
 						className="w-full"
 						size="lg"
 						disabled={selectedTimeSlot === null}
 						onClick={() => {
+							setError('');
+							setLoading(true);
 							addBooking({
-								name: 'Yil',
-								start: 17,
-								doctorId: 'M2159',
+								name: user,
+								start: parseFloat(selectedTimeSlot!),
+								doctorId: doctor.id,
 								date: convertDateToString(selectedDate),
-							});
+							})
+								.then(() => {
+									setLoading(false);
+								})
+								.catch((err) => {
+									console.log(err);
+									setError(err.response.data);
+									setLoading(false);
+								});
 						}}
 					>
 						Book Appointment
