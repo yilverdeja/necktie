@@ -27,12 +27,7 @@ interface Props {
 
 const DoctorBooking = ({ doctor }: Props) => {
 	const { user, bookings } = useStore();
-	const {
-		addBooking,
-		cancelBooking,
-		loading,
-		error: bookingsError,
-	} = useBookings(false);
+	const { addBooking, cancelBooking, loading } = useBookings(false);
 	const [selectedDate, setSelectedDate] = useState(new Date());
 	const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(
 		null
