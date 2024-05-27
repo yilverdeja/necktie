@@ -17,7 +17,7 @@ const DoctorProfilePage = () => {
 
 	useEffect(() => {
 		setLoading(true);
-		fetchDoctorById(id)
+		fetchDoctorById(id!)
 			.then((fetchedDoctor) => {
 				if (!fetchedDoctor) {
 					setError('Doctor does not exist');
