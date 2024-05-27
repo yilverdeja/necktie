@@ -8,7 +8,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 const DoctorProfilePage = () => {
 	const { id } = useParams();
-	const fetchDoctorById = useStore((s) => s.fetchDoctorById);
+	const { fetchDoctorById, fetchBookings } = useStore((state) => ({
+		fetchDoctorById: state.fetchDoctorById,
+		fetchBookings: state.fetchBookings,
+	}));
 	const navigate = useNavigate();
 	const [doctor, setDoctor] = useState<Doctor | null>(null);
 	const [isLoading, setLoading] = useState(false);
@@ -24,6 +27,7 @@ const DoctorProfilePage = () => {
 				} else {
 					setDoctor(fetchedDoctor);
 					setError('');
+					fetchBookings();
 				}
 				setLoading(false);
 			})
@@ -34,7 +38,7 @@ const DoctorProfilePage = () => {
 			.finally(() => {
 				setLoading(false);
 			});
-	}, [id, fetchDoctorById]);
+	}, [id, fetchDoctorById, fetchBookings]);
 
 	if (isLoading) return <p>Loading doctor...</p>;
 	if (error) return <p>{error}</p>;

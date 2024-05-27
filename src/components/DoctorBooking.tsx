@@ -34,13 +34,19 @@ const convertFloatToTimeString = (floatTime: number): string => {
 	return `${hours}:${minutes.toString().padStart(2, '0')}`;
 };
 
+const convertTimeStringToFloat = (timeString: string): number => {
+	const [hours, minutes] = timeString.split(':').map(Number);
+	const fractionalHours = minutes / 60;
+	return hours + fractionalHours;
+};
+
 interface TimeSlot {
 	slot: string;
 	isAvailable: boolean;
 }
 
 const DoctorBooking = ({ doctor }: Props) => {
-	const { addBooking, user } = useStore();
+	const { addBooking, user, bookings } = useStore();
 	const [selectedDate, setSelectedDate] = useState(new Date());
 	const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(
 		null
@@ -49,6 +55,11 @@ const DoctorBooking = ({ doctor }: Props) => {
 	const [error, setError] = useState('');
 
 	const dayOrder = { MON: 1, TUE: 2, WED: 3, THU: 4, FRI: 5, SAT: 6, SUN: 0 };
+
+	const doctorBookings = bookings.filter(
+		(booking) =>
+			booking.doctorId === doctor.id && booking.status === 'confirmed'
+	);
 
 	const generateTimeSlots = (
 		hours: OpeningHours[],
@@ -62,17 +73,31 @@ const DoctorBooking = ({ doctor }: Props) => {
 					time < parseFloat(hour.end);
 					time++
 				) {
+					const isBooked =
+						doctorBookings.filter(
+							(booking) =>
+								booking.date ===
+									convertDateToString(selectedDate) &&
+								booking.start === time
+						).length > 0;
+
+					const now = new Date();
+					const isBeforeNow =
+						selectedDate &&
+						selectedDate.getFullYear() === now.getFullYear() &&
+						selectedDate.getMonth() === now.getMonth() &&
+						selectedDate.getDate() === now.getDate() &&
+						now.getHours() + now.getMinutes() / 60 > time;
+
 					slots.push({
 						slot: convertFloatToTimeString(time),
-						isAvailable: true,
+						isAvailable: !isBooked && !isBeforeNow,
 					});
 				}
 			}
 		});
 		return slots;
 	};
-
-	// gets bookings by doctor
 	// gets current time
 
 	const timeSlots = generateTimeSlots(
@@ -130,7 +155,13 @@ const DoctorBooking = ({ doctor }: Props) => {
 							selectedTimeSlot={selectedTimeSlot}
 						/>
 					</div>
-					{error && <p className="text-red-500">{error}</p>}
+					{error && (
+						<p className="text-red-500">
+							{error === 'invalid booking'
+								? 'Unable to make booking at this time'
+								: error}
+						</p>
+					)}
 					<Button
 						className="w-full"
 						size="lg"
@@ -140,12 +171,15 @@ const DoctorBooking = ({ doctor }: Props) => {
 							setLoading(true);
 							addBooking({
 								name: user,
-								start: parseFloat(selectedTimeSlot!),
+								start: convertTimeStringToFloat(
+									selectedTimeSlot!
+								),
 								doctorId: doctor.id,
 								date: convertDateToString(selectedDate),
 							})
 								.then(() => {
 									setLoading(false);
+									setSelectedTimeSlot(null);
 								})
 								.catch((err) => {
 									console.log(err);

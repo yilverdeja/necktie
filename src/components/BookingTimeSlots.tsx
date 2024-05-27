@@ -28,7 +28,9 @@ const BookingTimeSlots = ({
 								? 'default'
 								: 'outline'
 						}
-						onClick={() => onSelectTimeSlot(slot.slot)}
+						onClick={() => {
+							onSelectTimeSlot(slot.slot);
+						}}
 						disabled={!slot.isAvailable}
 					>
 						{slot.slot}

@@ -49,11 +49,7 @@ const useStore = create<StoreState>((set, get) => ({
 	},
 	addBooking: async (booking) => {
 		const newBooking = await bookingsClient.create(booking);
-		console.log(newBooking);
-
-		const { bookings } = get();
-		console.log(booking);
-		set({ bookings: [...bookings, booking] });
+		set({ bookings: [...get().bookings, newBooking] });
 	},
 	cancelBooking: async (bookingId) => {
 		const { bookings } = get();
