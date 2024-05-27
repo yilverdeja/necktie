@@ -7,41 +7,22 @@ import {
 } from '@/components/ui/Popover';
 import Doctor, { OpeningHours } from '@/entities/Doctor';
 import { CalendarDaysIcon, ChevronDownIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import BookingTimeSlots from '@/components/BookingTimeSlots';
 import useStore from '@/store';
 import { useToast } from '@/components/ui/useToast';
 import { ToastAction } from '@/components/ui/Toast';
 import { useBookings } from '@/hooks/useBookings';
 import { DAY_ORDER_0 } from '@/utils/const';
+import {
+	TimeSlot,
+	convertDateToString,
+	convertFloatToTimeString,
+	convertTimeStringToFloat,
+} from '@/utils/helper';
 
 interface Props {
 	doctor: Doctor;
-}
-
-const convertDateToString = (date: Date) => {
-	const year = date.getFullYear().toString().padStart(2, '0');
-	const month = (date.getMonth() + 1).toString().padStart(2, '0');
-	const day = date.getDate().toString().padStart(2, '0');
-
-	return year + '-' + month + '-' + day;
-};
-
-const convertFloatToTimeString = (floatTime: number): string => {
-	const hours = Math.floor(floatTime);
-	const minutes = Math.round((floatTime - hours) * 60);
-	return `${hours}:${minutes.toString().padStart(2, '0')}`;
-};
-
-const convertTimeStringToFloat = (timeString: string): number => {
-	const [hours, minutes] = timeString.split(':').map(Number);
-	const fractionalHours = minutes / 60;
-	return hours + fractionalHours;
-};
-
-interface TimeSlot {
-	slot: string;
-	isAvailable: boolean;
 }
 
 const DoctorBooking = ({ doctor }: Props) => {
@@ -60,43 +41,43 @@ const DoctorBooking = ({ doctor }: Props) => {
 			booking.doctorId === doctor.id && booking.status === 'confirmed'
 	);
 
-	const generateTimeSlots = (
-		hours: OpeningHours[],
-		day: number
-	): TimeSlot[] => {
-		const slots: TimeSlot[] = [];
-		hours.forEach((hour) => {
-			if (!hour.isClosed && DAY_ORDER_0[hour.day] === day) {
-				for (
-					let time = parseFloat(hour.start);
-					time < parseFloat(hour.end);
-					time++
-				) {
-					const isBooked =
-						doctorBookings.filter(
-							(booking) =>
-								booking.date ===
-									convertDateToString(selectedDate) &&
-								booking.start === time
-						).length > 0;
+	const generateTimeSlots = useCallback(
+		(hours: OpeningHours[], day: number): TimeSlot[] => {
+			const slots: TimeSlot[] = [];
+			hours.forEach((hour) => {
+				if (!hour.isClosed && DAY_ORDER_0[hour.day] === day) {
+					for (
+						let time = parseFloat(hour.start);
+						time < parseFloat(hour.end);
+						time++
+					) {
+						const isBooked =
+							doctorBookings.filter(
+								(booking) =>
+									booking.date ===
+										convertDateToString(selectedDate) &&
+									booking.start === time
+							).length > 0;
 
-					const now = new Date();
-					const isBeforeNow =
-						selectedDate &&
-						selectedDate.getFullYear() === now.getFullYear() &&
-						selectedDate.getMonth() === now.getMonth() &&
-						selectedDate.getDate() === now.getDate() &&
-						now.getHours() + now.getMinutes() / 60 > time;
+						const now = new Date();
+						const isBeforeNow =
+							selectedDate &&
+							selectedDate.getFullYear() === now.getFullYear() &&
+							selectedDate.getMonth() === now.getMonth() &&
+							selectedDate.getDate() === now.getDate() &&
+							now.getHours() + now.getMinutes() / 60 > time;
 
-					slots.push({
-						slot: convertFloatToTimeString(time),
-						isAvailable: !isBooked && !isBeforeNow,
-					});
+						slots.push({
+							slot: convertFloatToTimeString(time),
+							isAvailable: !isBooked && !isBeforeNow,
+						});
+					}
 				}
-			}
-		});
-		return slots;
-	};
+			});
+			return slots;
+		},
+		[selectedDate, doctorBookings]
+	);
 	// gets current time
 
 	const timeSlots = generateTimeSlots(
@@ -105,27 +86,27 @@ const DoctorBooking = ({ doctor }: Props) => {
 	);
 
 	// Check if selectedDate is today's date
-	const isToday = (date: Date) => {
+	const isToday = useCallback(() => {
 		const today = new Date();
 		return (
-			date.getMonth() === today.getMonth() &&
-			date.getFullYear() === today.getFullYear() &&
-			date.getDate() === today.getDate()
+			selectedDate.getMonth() === today.getMonth() &&
+			selectedDate.getFullYear() === today.getFullYear() &&
+			selectedDate.getDate() === today.getDate()
 		);
-	};
+	}, [selectedDate]);
 
 	// Handlers for previous and next date buttons
-	const handlePrev = () => {
+	const handlePrev = useCallback(() => {
 		const newDate = new Date(selectedDate);
 		newDate.setDate(newDate.getDate() - 1);
 		setSelectedDate(newDate);
-	};
+	}, [selectedDate]);
 
-	const handleNext = () => {
+	const handleNext = useCallback(() => {
 		const newDate = new Date(selectedDate);
 		newDate.setDate(newDate.getDate() + 1);
 		setSelectedDate(newDate);
-	};
+	}, [selectedDate]);
 
 	// TODO: manage loading and error states better
 	if (isLoading) return <p>Loading...</p>;
@@ -176,7 +157,7 @@ const DoctorBooking = ({ doctor }: Props) => {
 						</Popover>
 						<Button
 							size="sm"
-							disabled={isToday(selectedDate)}
+							disabled={isToday()}
 							onClick={handlePrev}
 						>
 							Prev

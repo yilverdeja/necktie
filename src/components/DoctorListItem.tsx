@@ -32,9 +32,9 @@ const DoctorListItem = ({ doctor }: Props) => {
 				</p>
 				<div className="flex items-center gap-2 flex-wrap my-2">
 					{openDays.length > 0 ? (
-						openDays.map((hour, index) => (
+						openDays.map((hour) => (
 							<Badge
-								key={index}
+								key={hour.day + hour.end}
 								className="px-2 py-1 text-xs"
 								variant="outline"
 							>

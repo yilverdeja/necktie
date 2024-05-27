@@ -14,52 +14,11 @@ import {
 	AlertDialogTrigger,
 } from '@/components/ui/AlertDialog';
 import { useBookings } from '@/hooks/useBookings';
-import { formatAddress } from '@/utils/helper';
+import { formatAddress, formatDateTime } from '@/utils/helper';
 
 interface Props {
 	booking: Booking;
 }
-
-const formatDateTime = (dateString: string, floatTime: number) => {
-	// Parse the date string
-	const [year, month, day] = dateString.split('-').map(Number);
-
-	// Calculate hours and minutes from the float time
-	const hours = Math.floor(floatTime);
-	const minutes = Math.round((floatTime - hours) * 60);
-
-	// Create a Date object (needed for formatting month name)
-	const date = new Date(year, month - 1, day);
-
-	// Format the time string
-	const timeString = `${hours}:${minutes.toString().padStart(2, '0')}`;
-
-	// Format the month name and ordinal day
-	const monthNames = [
-		'January',
-		'February',
-		'March',
-		'April',
-		'May',
-		'June',
-		'July',
-		'August',
-		'September',
-		'October',
-		'November',
-		'December',
-	];
-	const monthName = monthNames[date.getMonth()];
-	const dayOrdinal = `${day}${
-		['th', 'st', 'nd', 'rd'][((day % 10) - 1) % 10] || 'th'
-	}`;
-
-	// Format the full date string
-	const dateStringFormatted = `${monthName} ${dayOrdinal} ${year}`;
-
-	// Return the formatted string
-	return `${timeString}, ${dateStringFormatted}`;
-};
 
 const BookingListItem = ({ booking }: Props) => {
 	const { doctorsById } = useStore();

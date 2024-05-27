@@ -2,6 +2,7 @@ import BookingListItem from '@/components/BookingListItem';
 import { useBookings } from '@/hooks/useBookings';
 import useDoctors from '@/hooks/useDoctors';
 import useStore from '@/store';
+import { getTimestamp } from '@/utils/helper';
 import { useEffect } from 'react';
 
 const ManageBookingsPage = () => {
@@ -38,11 +39,8 @@ const ManageBookingsPage = () => {
 				{bookings
 					.filter((booking) => booking.name === user)
 					.sort((a, b) => {
-						// Extract timestamps for comparison
-						const timeA = new Date(a.date!).getTime();
-						const timeB = new Date(b.date!).getTime();
-
-						// Check if either booking is cancelled
+						const timeA = getTimestamp(a.date) + a.start;
+						const timeB = getTimestamp(b.date) + b.start;
 						const isACancelled = a.status === 'cancelled';
 						const isBCancelled = b.status === 'cancelled';
 

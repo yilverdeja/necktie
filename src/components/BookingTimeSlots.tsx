@@ -1,9 +1,5 @@
 import { Button } from '@/components/ui/Button';
-
-interface TimeSlot {
-	slot: string;
-	isAvailable: boolean;
-}
+import { TimeSlot } from '@/utils/helper';
 
 interface Props {
 	timeSlots: TimeSlot[];
@@ -19,9 +15,9 @@ const BookingTimeSlots = ({
 	return (
 		<div className="grid sm:grid-cols-2 gap-2">
 			{timeSlots.length > 0 ? (
-				timeSlots.map((slot, index) => (
+				timeSlots.map((slot) => (
 					<Button
-						key={index}
+						key={slot.slot}
 						size="sm"
 						variant={
 							selectedTimeSlot === slot.slot
