@@ -9,6 +9,7 @@ const useDoctors = (fetchOnMount: boolean = true) => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<Error | null>(null);
 	const doctors = useStore((state) => state.doctors);
+	const doctorsLoaded = useStore((state) => state.doctorsLoaded);
 	const setDoctors = useStore((state) => state.setDoctors);
 
 	const getDoctors = useCallback(async () => {
@@ -31,10 +32,10 @@ const useDoctors = (fetchOnMount: boolean = true) => {
 	}, [setDoctors]);
 
 	useEffect(() => {
-		if (fetchOnMount) {
+		if (fetchOnMount && !doctorsLoaded) {
 			getDoctors();
 		}
-	}, [getDoctors, fetchOnMount]);
+	}, [getDoctors, fetchOnMount, doctorsLoaded]);
 
 	return {
 		doctors,

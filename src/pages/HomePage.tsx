@@ -4,7 +4,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import DoctorListItem from '../components/DoctorListItem';
 
 const HomePage = () => {
-	const { doctors, loading, error } = useDoctors();
+	const { doctors, loading, error } = useDoctors(true);
 	const skeletons = [1, 2, 3, 4, 5];
 
 	if (error)

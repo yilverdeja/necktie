@@ -64,6 +64,9 @@ const BookingListItem = ({ booking }: Props) => {
 	const { doctorsById } = useStore();
 	const { cancelBooking } = useBookings(false);
 	const doctor = doctorsById[booking.doctorId];
+
+	if (!doctor) return <p>Doctor information is not available</p>;
+
 	return (
 		<Card className="flex flex-col justify-center p-4 sm:p-6 gap-4 sm:gap-6">
 			<div className="flex-1 grid gap-1">

@@ -62,8 +62,8 @@ const ManageBookingsPage = () => {
 						}
 						return 0;
 					})
-					.map((booking, index) => (
-						<BookingListItem key={index} booking={booking} />
+					.map((booking) => (
+						<BookingListItem key={booking.id} booking={booking} />
 					))}
 			</div>
 		</>
