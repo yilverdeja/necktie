@@ -3,6 +3,7 @@ import Layout from './pages/Layout';
 import HomePage from './pages/HomePage';
 import ErrorPage from './pages/ErrorPage';
 import DoctorProfilePage from './pages/DoctorProfilePage';
+import ManageBookingsPage from './pages/ManageBookingsPage';
 
 const router = createBrowserRouter([
 	{
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
 			{
 				path: '/doctors/:id',
 				element: <DoctorProfilePage />,
+			},
+			{
+				path: '/bookings',
+				element: <ManageBookingsPage />,
 			},
 		],
 	},
