@@ -13,7 +13,7 @@ import {
 import useStore from '@/store';
 
 const Navbar = () => {
-	const user = useStore((s) => s.user);
+	const { user, setUser } = useStore();
 	const { pathname } = useLocation();
 
 	return (
@@ -106,12 +106,19 @@ const Navbar = () => {
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end">
-						<DropdownMenuLabel>My Account</DropdownMenuLabel>
+						<DropdownMenuLabel>Switch Users</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem
-							onClick={() => console.log('switch user')}
+							disabled={user === 'Yil'}
+							onClick={() => setUser('Yil')}
 						>
-							Switch User
+							Yil
+						</DropdownMenuItem>
+						<DropdownMenuItem
+							disabled={user === 'Bobby'}
+							onClick={() => setUser('Bobby')}
+						>
+							Bobby
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>

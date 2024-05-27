@@ -13,6 +13,7 @@ interface StoreState {
 	doctors: Doctor[];
 	bookings: Booking[];
 	userBookings: Booking[];
+	setUser: (newUser: string) => void;
 	fetchDoctors: () => Promise<void>;
 	fetchDoctorById: (doctorId: string) => Promise<Doctor | undefined>;
 	fetchBookings: () => Promise<void>;
@@ -26,6 +27,9 @@ const useStore = create<StoreState>((set, get) => ({
 	doctors: [],
 	bookings: [],
 	userBookings: [],
+	setUser: (newUser) => {
+		set({ user: newUser });
+	},
 	fetchDoctors: async () => {
 		const doctors = await doctorsClient.getAll({});
 		if (!doctors) return;
