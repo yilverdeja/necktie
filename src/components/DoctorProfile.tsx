@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, AvatarFallback } from '@/components/ui/Avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
 	groupOpeningHours,
 	formatDayRange,

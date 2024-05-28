@@ -1,17 +1,17 @@
-import { Button } from '@/components/ui/Button';
-import { Calendar } from '@/components/ui/Calendar';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
 	Popover,
 	PopoverTrigger,
 	PopoverContent,
-} from '@/components/ui/Popover';
+} from '@/components/ui/popover';
 import Doctor, { OpeningHours } from '@/entities/Doctor';
 import { CalendarDaysIcon, ChevronDownIcon } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import BookingTimeSlots from '@/components/BookingTimeSlots';
 import useStore from '@/store';
-import { useToast } from '@/components/ui/useToast';
-import { ToastAction } from '@/components/ui/Toast';
+import { useToast } from '@/components/ui/use-toast';
+import { ToastAction } from '@/components/ui/toast';
 import { useBookings } from '@/hooks/useBookings';
 import { DAY_ORDER_0 } from '@/utils/const';
 import {

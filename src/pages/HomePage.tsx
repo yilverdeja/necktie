@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import useDoctors from '@/hooks/useDoctors';
-import { Skeleton } from '@/components/ui/Skeleton';
+import { Skeleton } from '@/components/ui/skeleton';
 import DoctorListItem from '@/components/DoctorListItem';
 
 const HomePage = () => {
