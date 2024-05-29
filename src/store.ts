@@ -9,7 +9,6 @@ interface StoreState {
 	doctors: Doctor[];
 	doctorsLoaded: boolean;
 	bookings: Booking[];
-	userBookings: Booking[];
 	setUser: (newUser: string) => void;
 	setDoctors: (doctors: Doctor[]) => void;
 	setBookings: (bookings: Booking[]) => void;
@@ -22,7 +21,6 @@ const useStore = create<StoreState>((set) => ({
 	doctors: [],
 	doctorsLoaded: false,
 	bookings: [],
-	userBookings: [],
 	setUser: (newUser) => {
 		set({ user: newUser });
 	},
