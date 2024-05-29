@@ -8,21 +8,31 @@ This is a doctor booking page web application that allows patients to schedule a
 
 On the home page, patients can see all the doctors. Clicing "Book Appointment" will direct them to the doctors page.
 
+![image](https://github.com/yilverdeja/necktie-doctor-booking/assets/29952939/b648f3b6-9ab2-4593-a6d9-3676dfa537a0)
+
 ### Book a Doctor
 
 On a doctors profile page, patients can see the doctors opening hours, and their availability of specific days. If a booking timeslot is not available, the timeslot will be disabled. Patiens will not be allowed to make a booking.
+
+![image](https://github.com/yilverdeja/necktie-doctor-booking/assets/29952939/770e50fa-a533-429b-a298-f213eaa45fa5)
 
 ### Notification on Success
 
 On booking success, the patient is notified that the booking was done. If this was an error on their part, they're allowed a brief moment to cancel the appointment by clicking "cancel"
 
+![image](https://github.com/yilverdeja/necktie-doctor-booking/assets/29952939/3f6f36bc-d36f-4df1-aa67-e5d643895afd)
+
 ### Manage Bookings
 
 Patients can view all of their bookings which are sorted with the upcoming bookings first. Patients can cancel bookings by selecting the "Cancel" button.
 
+![image](https://github.com/yilverdeja/necktie-doctor-booking/assets/29952939/3a208c0b-a9dd-4f4c-bcca-e0e42e285a0a)
+
 ### Simple User Profile
 
 To make a booking with a doctor, a patient needs to provide their information. On the top-right of the navigation menu is the ability to switch users. For simplicity sake, only two different users can be selected.
+
+![image](https://github.com/yilverdeja/necktie-doctor-booking/assets/29952939/3f028049-8d6d-4bdb-a57e-db5b5b75e0e8)
 
 ## Getting Started
 
@@ -136,8 +146,6 @@ Functionality:
 
 -   Don't allow users to make a booking with the same doctor on the same day.
 -   Don't allow users to make a booking with another doctor if that booking overlaps with another booking(i.e. Yil cannot book May 28th at 10AM with both Dr. Bob and Dr. Dog)
-
-### User Bookings State Management
 
 ### Tanstack React Query
 
