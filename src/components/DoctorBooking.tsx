@@ -26,7 +26,10 @@ interface Props {
 }
 
 const DoctorBooking = ({ doctor }: Props) => {
-	const { user, bookings } = useStore();
+	const { user, bookings } = useStore((state) => ({
+		user: state.user,
+		bookings: state.bookings,
+	}));
 	const { addBooking, cancelBooking, loading } = useBookings(false);
 	const [selectedDate, setSelectedDate] = useState(new Date());
 	const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(

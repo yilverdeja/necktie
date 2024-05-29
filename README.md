@@ -95,9 +95,101 @@ Main dependencies are:
 
 > The rest of the dependencies are mostly from shadcn/ui. Since it's an open source component, it's possible to remove some for different use cases, but I decided to leave them in here to simplify development.
 
-## Assumptions
+## Testing
+
+Currently this project does not have any unit tests.
+
+### Test Hooks / API Calls
+
+#### useBookings
+
+**GET Bookings**
+
+1. returns an array of Booking elements
+
+**POST Booking**
+
+1. setting the start time to before or after opening hours should result in invalid booking
+2. setting the date to before current date should result in invalid booking
+3. an empty body will return a 400 error with a 4-element string array
+4. an invalid doctorId will return a 404 error
+5. a successful post will create an id, and set the status to confirmed
+
+**GET Booking** _(not implemented)_
+
+1. a valid booking id will return a valid booking element
+2. an invalid booking id will return null with a 200 status
+
+**PATCH Booking**
+
+1. patching "status" to cancelled will result in a confirmed booking to become cancelled
+2. patching "status" to confirmed will result in a cancelled booking to become confirmed
+3. patching without "status" value will result in a 400 error
+4. patching with a valid "status" and other parameters of different values will only update the status
+
+#### useDoctors
+
+**GET Doctors**
+
+1. returns an array of Doctor elements
+
+#### useDoctor
+
+**GET Doctor**
+
+1. a valid doctorId will return a valid Doctor elements
+2. an invalid doctorId will return a 404 error with "doctor not found" as a message
+
+### Test Main Route Pages
+
+#### Home Page
+
+1. on mount renders "find doctors"
+2. calls api to get doctors and renders a list of doctors which can be found by the "Dr." keyword match
+3. an empty list should result in a text that says "there are no available doctors"
+
+#### Doctors Profile
+
+1. on mount calls api to get doctor and renders information that should contain "dr." "open hours" and "address". It should also contain "book an appointment" "booking date" "timeslots"
+2. with no bookings, all the timeslots of a future existing date will be not disabled
+3. with a list of bookings set for the whole day, all the timeslots of that date will be disabled
+4. cannot click the "prev" button if the date is the current date
+5. selecting a valid date and timeslot will enable the "book appointment" button
+6. bookings by other users should disable timeslots in doctor profile booking page
+
+#### Manage Bookings
+
+1. on mount renders "manage bookings"
+2. calls api to get bookings and doctor information and displays users bookings with all the doctors, which can be testing by counting "dr."s
+3. no bookings by the user should result in a text that says "there are no bookings"
+
+## Assumptions & Opinions
+
+Here are some of the assumptions I've made:
+
+1. get Doctors will return a non-empty list of Doctors
+2. `Booking` `date` should be mandatory
+3. `Booking` `status` can be set as either `cancelled` or `confirmed`. The model states it's either `cancel` or `confirmed` which is incorrect.
+4. I kept the time in a 24 hour format.
+5. api calls will either return as 2** or 4** codes
+
+Here are some opinions I've made:
+
+1. Should `Doctor` `description` be mandatory if it's empty for all doctors?
+2. Does a `Doctor` `opening_hours` element always have 7 elements? If it's closed, why not just have no element for that day since there's no need to set "start" and "end".
+
+## Production Deployment
+
+Considering deploying this project to production? Here are some extra things to do:
+
+-   Create user authentication so users cannot easily switch to other users, and see their bookings
+-   Ensure there's robust error handling and reporting like handling API failures, alongisde network issues, and unexpected user inputs
 
 ## Improvements
+
+### 24-hour to 12-hour format
+
+Change the times from a 24-hour format to a 12-hour format.
 
 ### Search, Filtering and Viewing
 

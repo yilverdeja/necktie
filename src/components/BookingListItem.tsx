@@ -21,8 +21,8 @@ interface Props {
 }
 
 const BookingListItem = ({ booking }: Props) => {
-	const { doctorsById } = useStore();
 	const { cancelBooking } = useBookings(false);
+	const doctorsById = useStore((state) => state.doctorsById);
 	const doctor = doctorsById[booking.doctorId];
 
 	if (!doctor) return <p>Doctor information is not available</p>;

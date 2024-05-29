@@ -14,7 +14,10 @@ import useStore from '@/store';
 import { BOOKING_ROUTE_PATH, HOME_ROUTE_PATH } from '@/utils/const';
 
 const Navbar = () => {
-	const { user, setUser } = useStore();
+	const { user, setUser } = useStore((state) => ({
+		user: state.user,
+		setUser: state.setUser,
+	}));
 	const { pathname } = useLocation();
 
 	return (

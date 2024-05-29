@@ -6,7 +6,10 @@ import { getTimestamp } from '@/utils/helper';
 import { useEffect } from 'react';
 
 const ManageBookingsPage = () => {
-	const { user, bookings } = useStore();
+	const { user, bookings } = useStore((state) => ({
+		user: state.user,
+		bookings: state.bookings,
+	}));
 	const {
 		refetch: fetchBookings,
 		loading: loadingBookings,
