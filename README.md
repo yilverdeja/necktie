@@ -245,5 +245,5 @@ Functionality:
 
 One assumption is that the list of doctors will not be updated often. Therefore, there's no need to refetch the doctors if it exists on the patients local storage. A query with a specific `staleTime` can be added here.
 
-<h3 style="color:#FF69B4">Theme</h3>
-<span style="color:#FF69B4">Make the site pink</span>
+### Theme
+Make the site pink ;)
