@@ -17,4 +17,5 @@ export default interface Doctor {
 	description: string;
 	address: DoctorAddress;
 	opening_hours: OpeningHours[];
+	avg_rating: number; // float from 0 to 5
 }

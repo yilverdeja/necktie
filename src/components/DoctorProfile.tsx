@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
 	groupOpeningHours,
@@ -8,12 +8,15 @@ import {
 
 import Doctor from '@/entities/Doctor';
 import { DAY_ORDER_1 } from '@/utils/const';
+import { useRatings } from '@/hooks/useRatings';
+import Stars from './Stars';
 
 interface Props {
 	doctor: Doctor;
 }
 
 const DoctorProfile = ({ doctor }: Props) => {
+	const { addRating } = useRatings();
 	const sortedHours = doctor.opening_hours.sort(
 		(a, b) => DAY_ORDER_1[a.day] - DAY_ORDER_1[b.day]
 	);
@@ -28,6 +31,10 @@ const DoctorProfile = ({ doctor }: Props) => {
 		.split(' ')
 		.map((char) => char[0])
 		.join('');
+
+	const handleRating = (rating: number) => {
+		addRating(doctor.id, rating);
+	};
 
 	return (
 		<>
@@ -67,6 +74,11 @@ const DoctorProfile = ({ doctor }: Props) => {
 					<p className="text-gray-500 dark:text-gray-400">
 						{formatAddress(doctor.address)}
 					</p>
+				</div>
+				<div className="">
+					<Stars
+						onSetRating={(rating: number) => handleRating(rating)}
+					/>
 				</div>
 			</div>
 		</>

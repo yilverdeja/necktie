@@ -13,6 +13,7 @@ interface StoreState {
 	setDoctors: (doctors: Doctor[]) => void;
 	setBookings: (bookings: Booking[]) => void;
 	setDoctor: (doctor: Doctor) => void;
+	setDoctorRating: (doctorId: string, rating: number) => void;
 }
 
 const useStore = create<StoreState>((set) => ({
@@ -44,6 +45,9 @@ const useStore = create<StoreState>((set) => ({
 		})),
 
 	setBookings: (bookings) => set({ bookings }),
+	setDoctorRating: (doctorId, rating) => {
+		// POST id doctor, rating
+	},
 }));
 
 export default useStore;
