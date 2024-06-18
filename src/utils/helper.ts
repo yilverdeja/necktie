@@ -53,6 +53,7 @@ export const groupOpeningHours = (hours: OpeningHours[]): HourGroup[] => {
 };
 
 export const formatDayRange = (days: string[]): string => {
+	if (days.length === 0) return '';
 	if (days.length === 1) return days[0];
 	const last = days.length - 1;
 	return `${days[0]}-${days[last]}`;
